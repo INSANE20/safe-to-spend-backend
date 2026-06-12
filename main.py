@@ -18,6 +18,19 @@ from database import get_conn, setup_database
 # App & CORS
 # ---------------------------------------------------------------------------
 app = FastAPI(title="Safe-To-Spend AI Engine")
+from fastapi import Request
+from fastapi.responses import Response
+
+@app.options("/{rest_of_path:path}")
+async def preflight_handler(rest_of_path: str):
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+        }
+    )
 
 ALLOWED_ORIGINS = os.environ.get(
     "ALLOWED_ORIGINS", "*"
